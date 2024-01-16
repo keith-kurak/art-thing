@@ -7,6 +7,7 @@ import {
   Text as DefaultText,
   View as DefaultView,
   FlatList as DefaultFlatList,
+  ActivityIndicator,
 } from "react-native";
 
 import Colors from "@/constants/Colors";
@@ -63,6 +64,30 @@ export function FlatList(props: FlatListProps) {
     <DefaultFlatList style={[{ backgroundColor }, style]} {...otherProps} />
   );
 }
+
+export function LoadingShade({ isLoading }: { isLoading: boolean }) {
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(0,0,0,0.5)",
+          zIndex: 1000,
+        }}
+      >
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+  return null;
+}
+
 
 export function useTheme() {
   const theme = useColorScheme() ?? "light";
