@@ -1,20 +1,38 @@
-import { ExpoRequest, ExpoResponse } from 'expo-router/server';
+import { ExpoRequest, ExpoResponse } from "expo-router/server";
+import storage from "node-persist";
 
-let favs = {};
-console.log('reset')
+async function initIfNeeded() {
+  // narrator: it's always needed (right now)
+  await storage.init({
+    dir: "./storage",
+    expiredInterval: 0,
+  });
+}
+
+// NOTE: this seems really prone to race conditions. We won't worry about it.
 
 export async function GET(request: ExpoRequest) {
-  const id = request.expoUrl.pathname.split('/')[3];
+  await initIfNeeded();
+  const params = request.expoUrl.searchParams;
+  const id = params.get("id")!;
+  const favs = (await storage.getItem("favs")) || {};
   return ExpoResponse.json({ favs: favs[id] || 0 });
 }
 
 export async function POST(request: ExpoRequest) {
-  const id = request.expoUrl.pathname.split('/')[3];
+  await initIfNeeded();
+  const body = await request.json();
+  const params = request.expoUrl.searchParams;
+  const id = params.get("id")!;
+  const favs = (await storage.getItem("favs")) || {};
+  const images = (await storage.getItem("images")) || {};
   if (!favs[id]) {
-    favs[id] = 1;
+    favs[id] = body.count;
   } else {
-    favs[id] += 1;
+    favs[id] += body.count;
   }
-  console.log(favs)
+  images[id] = body.image;
+  await storage.setItem("favs", favs);
+  await storage.setItem("images", images);
   return ExpoResponse.json({ favs: favs[id] });
 }
