@@ -11,9 +11,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Text, View, useTheme } from "@/components/Themed";
 
-async function postFav(category: string, id: string, count: number, image: string) {
+async function postFav(id: string, count: number, image: string) {
   try {
-    const response = await fetch(`/categories/${category}/${id}/fav`, {
+    const response = await fetch(`/works/${id}/fav`, {
       method: "POST",
       headers: {
         Accept: "application.json",
@@ -33,7 +33,7 @@ export default function IdScreen() {
 
   const dimensions = useWindowDimensions();
 
-  const { id, category }: { id: string; category: string } =
+  const { id }: { id: string; } =
     useLocalSearchParams();
 
   const queryClient = useQueryClient();
@@ -53,9 +53,7 @@ export default function IdScreen() {
     placeholderData: () => {
       return {
         data: queryClient
-          .getQueryData([`category:${category}`])
-          // @ts-ignore
-          ?.data?.find((d) => d.id == id),
+          .getQueryData([`worksCache:${id}`])
       };
     },
   });
@@ -63,7 +61,7 @@ export default function IdScreen() {
   const favQuery = useQuery({
     queryKey: [`favs:${id}`],
     queryFn: async () => {
-      const response = await fetch(`/categories/${category}/${id}/fav`);
+      const response = await fetch(`/works/${id}/fav`);
       // @ts-ignore
       return await response.json();
     },
@@ -79,7 +77,7 @@ export default function IdScreen() {
   const onPressFav = useCallback(async () => {
     console.log('localFavs', localFavs)
     setLocalFavs(localFavs + 1);
-    postFav(category, id, 1, query.data?.data.images.web.url);
+    postFav(id, 1, query.data?.data.images.web.url);
   }, [ localFavs ]);
 
   const item = query.data?.data;
@@ -90,7 +88,7 @@ export default function IdScreen() {
     <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          title: item?.title,
+          title: item?.title || 'Loading...',
         }}
       />
 
@@ -115,7 +113,7 @@ export default function IdScreen() {
               justifyContent: "space-between",
             }}
           >
-            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.title}>{item?.title}</Text>
             <View style={{ marginTop: 12, flexDirection: "row" }}>
               <TouchableOpacity onPress={onPressFav}>
                 <FontAwesome6
@@ -155,6 +153,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 12,
     marginBottom: 4,
+    flex: 1,
   },
   separator: {
     height: 1,

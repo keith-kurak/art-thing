@@ -1,16 +1,22 @@
 import { StyleSheet, Pressable } from "react-native";
+import { useEffect } from "react";
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Text, View, FlatList, useTheme, LoadingShade } from "@/components/Themed";
-
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+import {
+  Text,
+  View,
+  FlatList,
+  useTheme,
+  LoadingShade,
+} from "@/components/Themed";
 
 export default function CategoryScreen() {
   const theme = useTheme();
 
   const { category }: { category: string } = useLocalSearchParams();
+
+  const queryClient = useQueryClient();
 
   // Queries
   const query = useQuery({
@@ -23,6 +29,16 @@ export default function CategoryScreen() {
     },
   });
 
+  useEffect(() => {
+    if (query.status === "success") {
+      query.data?.data.forEach((item: any) => {
+        queryClient.setQueryData([`worksCache:${item.id}`], {
+          images: { web: { url: item.images.web.url } },
+        });
+      });
+    }
+  }, [query.status]);
+
   return (
     <View style={{ flex: 1 }}>
       <Stack.Screen
@@ -34,7 +50,7 @@ export default function CategoryScreen() {
         data={query.data?.data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Link asChild href={`/categories/${category}/${item.id}`}>
+          <Link asChild href={`/works/${item.id}/`}>
             <Pressable>
               <View style={{ flexDirection: "row", paddingHorizontal: 16 }}>
                 <View style={{ flex: 1, justifyContent: "flex-start" }}>
@@ -48,7 +64,6 @@ export default function CategoryScreen() {
                 <Image
                   style={{ height: 100, width: 100 }}
                   source={{ uri: item.images.web.url }}
-                  placeholder={blurhash}
                   contentFit="contain"
                   transition={1000}
                 />
