@@ -1,4 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import {
   DarkTheme,
   DefaultTheme,
@@ -10,6 +11,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { View } from "@/components/Themed";
 import { useColorScheme } from "@/components/useColorScheme";
 
 export {
@@ -29,6 +31,7 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
+    ...FontAwesome6.font
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
@@ -56,6 +59,7 @@ function RootLayoutNav() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <View style={{ flex: 1 }} >
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack
           screenOptions={{
@@ -66,6 +70,7 @@ function RootLayoutNav() {
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
       </ThemeProvider>
+      </View>
     </QueryClientProvider>
   );
 }
