@@ -77,6 +77,10 @@ export default function IdScreen() {
   const onPressFav = useCallback(async () => {
     console.log('localFavs', localFavs)
     setLocalFavs(localFavs + 1);
+    // flimsy code, just bail
+    if (!query.data?.data.images?.web?.url) {
+      return;
+    }
     postFav(id, 1, query.data?.data.images.web.url);
   }, [ localFavs ]);
 
