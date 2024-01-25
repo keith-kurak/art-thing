@@ -27,3 +27,9 @@ A demo of Expo Router v3 with API Routes using the Cleveland Museum of Art Open 
 ## related Code Youngstown presentation
 Not much to these slides, but if it helps, it helps.
 [Slides](https://docs.google.com/presentation/d/1z1YapFTQwTC4WWe7ynMeAIypnJWJG7f7Z2wlyWvdWoo/edit?usp=sharing)
+
+## Keith's contact info
+[Bird app](https://twitter.com/llamaluvr)
+[LinkedIn](https://www.linkedin.com/in/keith-kurak/)
+[Discord](https://chat.expo.dev)
+
