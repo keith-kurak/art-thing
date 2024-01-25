@@ -23,3 +23,7 @@ A demo of Expo Router v3 with API Routes using the Cleveland Museum of Art Open 
 ## TODO
 - Rate limit the clapping so it isn't so likely to crash, or just put it somewhere else like Firebase
 - Screen transitions and the navbar don't look quite right on Android on dark mode, need to look at background colors.
+
+## related Code Youngstown presentation
+Not much to these slides, but if it helps, it helps.
+[Slides](https://docs.google.com/presentation/d/1z1YapFTQwTC4WWe7ynMeAIypnJWJG7f7Z2wlyWvdWoo/edit?usp=sharing)
