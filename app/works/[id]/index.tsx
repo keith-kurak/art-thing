@@ -60,7 +60,7 @@ export default function IdScreen() {
     queryKey: [`id:${id}`],
     queryFn: async () => {
       const response = await fetch(
-        `https://openaccess-api.clevelandart.org/api/artworks/${id}`
+        `/works/${encodeURIComponent(id)}/details`
       );
       // @ts-ignore
       return await response.json();
