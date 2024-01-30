@@ -6,10 +6,11 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, useNavigationContainerRef } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
 
 import { View } from "@/components/Themed";
 import { useColorScheme } from "@/components/useColorScheme";
@@ -56,6 +57,10 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   const queryClient = new QueryClient();
+
+  const navigationRef = useNavigationContainerRef();
+
+  useReactNavigationDevTools(navigationRef);
 
   return (
     <QueryClientProvider client={queryClient}>
